@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>InputForm</title>
+</head>
+
+<body>
+  <div class="container d-flex justify-content-center ">
+    <form [formGroup]="profileForm" class="mx-auto w-75 profileForm" (ngSubmit)="submitForm()">
+      <h2 class="mt-3">{{title}}</h2>
+      <div class="d-flex flex-column col-lg-12 mb-3 mt-3">
+        <label for="fullname" class="form-label">Full Name</label>
+        <input type="text" class="form-control" name="fullname" id="fullname" placeholder="FullName"
+          formControlName="name" [ngClass]="{ 'is-invalid': name?.invalid && (name?.touched || name?.dirty) }" />
+        <div *ngIf="name?.invalid&&(name?.touched||name?.dirty)" class="alertText alert alert-danger">
+          <div *ngIf="name?.errors?.['required']">
+            Name is required.
+          </div>
+          <div *ngIf="name?.errors?.['minlength']">
+            Name should be of minimum length 2.
+          </div>
+          <div *ngIf="name?.errors?.['pattern']">
+            Name cannot have special characters, it should hava alphabets and space only.
+          </div>
+        </div>
+      </div>
+      <div class="d-flex flex-column col-lg-12 mb-3">
+        <label for="email" class="form-label ">Email</label>
+        <input type="text" class="form-control " name="email" id="email" placeholder="Email" formControlName="email"
+          [ngClass]="{'is-invalid':email?.invalid&&(email?.dirty||email?.touched)}" />
+        <div *ngIf="email?.invalid&&(email?.dirty||email?.touched)" class="alertText alert alert-danger">
+          <div *ngIf="email?.errors?.['required']">
+            Email is required.
+          </div>
+          <div *ngIf="email?.errors?.['pattern']">
+            Email invalid.
+          </div>
+        </div>
+      </div>
+      <div class="d-flex flex-row mb-3">
+        <div class="container d-flex justify-content-start">
+          <div class="row">
+            <div class="col-12">
+              <span class="d-inline form-check-label">Hobbies</span>
+            </div>
+            <div class="col-12 d-flex flex-wrap ">
+              <div class="form-check form-check-inline" *ngFor="let y of hobby, let i = index">
+                <label>
+                  <input class="form-check-input" type="checkbox" name="hobbies" id={{y}} value={{y}} (change)="onChange($event)"> {{y}}
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="form-check d-flex flex-column col-lg-6 ps-0">
+          <label class="form-check-label" for="gender">Gender</label>
+          <div class="d-flex flex-row ps-4">
+            <input type="radio" class="form-check-input" name="gender" value="male" formControlName="gender">Male
+            <input type="radio" class="form-check-input ms-4" name="gender" value="female"
+              formControlName="gender">Female
+            <!-- <div *ngIf="gender?.invalid && (gender?.dirty||gender?.touched)" class="alert alert-danger alertText">
+              <div *ngIf="gender?.errors?.['required']">
+                Select the Gender
+              </div>
+            </div> -->
+          </div>
+        </div>
+
+      </div>
+      <div class="mb-3 d-flex flex-row gap-2">
+        <div class="col-6 d-flex flex-column">
+          <label for="state" class="form-label">State</label>
+          <select name="state" id="state" class="form-select" formControlName="state"
+            [ngClass]="{'is-invalid':state?.invalid &&(state?.dirty||state?.touched)}">
+
+            <option value="" selected>Select</option>
+            <option *ngFor="let state of states" value={{state}}>{{state}}</option>
+          </select>
+          <div *ngIf="state?.invalid &&(state?.dirty||state?.touched)" class="alertText alert alert-danger">
+            <div *ngIf="state?.errors?.['required']">
+              Select the state
+            </div>
+          </div>
+        </div>
+        <div class="col-6 d-flex flex-column">
+          <label for="city" class="form-label">City</label>
+          <select name="city" id="city" class="form-select" formControlName="city"
+            [ngClass]="{'is-invalid':city?.invalid&&(city?.dirty||city?.touched)}"
+            >
+            <option value="" [selected]="!profileForm.get('city')?.value">Select</option>
+            <option *ngFor="let city of updatedcity" [value]="city">{{ city }}</option>
+          </select>
+          <div *ngIf="city?.invalid&&(city?.dirty||city?.touched)" class="alertText alert alert-danger">
+            <div *ngIf="city?.errors?.['required']">
+              Select the city
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class=" mb-3 d-flex flex-row gap-2">
+              <div class="col-lg-6 mb-3 d-flex flex-column">
+                <label for="dob" class="form-label">Date of Birth</label>
+                <input type="date" name="dob" id="dob" class="form-control" formControlName="dob">
+                <div *ngIf="dob?.invalid&&(dob?.dirty||dob?.touched)" class="alertText alert alert-danger">
+                  <div *ngIf="dob?.errors?.['required']">
+                    Enter Date of Birth
+                  </div>
+                  <div *ngIf="dob?.errors?.['ageInvalid']">
+                    Your age in less than 18
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-6 d-flex flex-column">
+                <label for="phone" class="form-label ">Phone number</label>
+                <input type="text" name="phone" placeholder="Phone number" class="form-control " formControlName="phone"
+                  [ngClass]="{'is-invalid':phone?.invalid&&(phone?.dirty||phone?.touched)}">
+                <div *ngIf="phone?.invalid&&(phone?.dirty||phone?.touched)" class="alertText alert alert-danger">
+                  <div *ngIf="phone?.errors?.['required']">
+                    Enter the Phone number
+                  </div>
+                  <div *ngIf="phone?.errors?.['pattern']">
+                    Enter valid Indian Phone number
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="mb-3 d-flex flex-row gap-2">
+              <div class="col-lg-6 mb-3 d-flex flex-column">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" name="password" id="password" class="form-control" placeholder="Create Password"
+                  formControlName="password"
+                  [ngClass]="{'is-invalid':password?.invalid&&(password?.dirty||password?.touched)}">
+                <div *ngIf="password?.invalid&&(password?.touched||password?.dirty)"
+                  class="alertText alert alert-danger">
+                  <div *ngIf="password?.errors?.['required']">
+                    Enter the password
+                  </div>
+                  <div *ngIf="password?.errors?.['pattern']">
+                    Enter a strong password. It consists of atleast one special character and atleast one number and
+                    atleast one capital letter.
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-6 d-flex flex-column">
+                <label for="confirmPassword" class="form-label ">Confirm Password</label>
+                <input type="password" name="confirmPassword" placeholder="Confirm Password" class="form-control "
+                  formControlName="confirmPassword"
+                  [ngClass]="{'is-invalid':password?.invalid&&(password?.dirty||password?.touched)}">
+                <div *ngIf="confirmPassword?.invalid&&(confirmPassword?.dirty||confirmPassword?.touched)"
+                  class="alertText alert alert-danger">
+                  <div *ngIf="confirmPassword?.errors?.['required']">
+                    Enter the correct password
+                  </div>
+                  <div *ngIf="confirmPassword?.errors?.['mismatch']">
+                    This password should be same as the password you created.
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="d-grid  gap-2">
+              <button type="submit" name="submitbtn" id="submitbtn" class="btn d-inline mx-auto"
+                [disabled]="!profileForm.valid">
+                Submit
+              </button>
+            </div>
+
+    </form>
+  </div>
+</body>
+
+</html>
